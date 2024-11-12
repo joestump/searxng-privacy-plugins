@@ -12,13 +12,13 @@ plugin_id = 'hello-world'
 logger = logger.getChild(plugin_id)
 
 
-def pre_search(request, search)
+def pre_search(request, search):
     logger.info('Search: ', search)
     logger.info('Request: ', request)
     return True
 
 
-def post_search(request, search)
+def post_search(request, search):
     logger.info('Search: ', search)
     logger.info('Request: ', request)
     return None
