@@ -13,18 +13,18 @@ logger = logger.getChild(plugin_id)
 
 
 def pre_search(request, search):
-    logger.info('Search: ', search)
-    logger.info('Request: ', request)
+    logger.info(f"Search: {search}")
+    logger.info(f"Request: {request}")
     return True
 
 
 def post_search(request, search):
-    logger.info('Search: ', search)
-    logger.info('Request: ', request)
+    logger.info(f"Search: {search}")
+    logger.info(f"Request: {request}")
     return None
 
 
 def on_result(request, search, result):
-    logger.info('Search: ', search)
-    logger.info('Result: ', result)
+    logger.info(f"Search: {search}")
+    logger.info(f"Result: {result}")
     return True
