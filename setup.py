@@ -25,11 +25,13 @@ setup(
     , license           = 'GNU Affero General Public License'
     , zip_safe          = False
     , py_modules        = [
-        'hello_world'
+        'hello_world',
+        'reader_news_proxy',
     ]
     , entry_points      = {
         'searxng.plugins' : [
-            'searxng-privacy.green-results = hello_world'
+            'searxng-privacy.hello-world = hello_world',
+            'searxng-privacy.reader-news-proxy = reader_news_proxy',
         ]
     }
 )
