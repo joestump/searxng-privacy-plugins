@@ -7,7 +7,7 @@ This is a collection of plugins for [SearXNG](https://docs.searxng.org/) with a 
 ## Plugins
 
 * [`hello_world`](hello_world.py) – A simple example plugin. Logs what's passed to the plugin hooks.
-* [`reader_news_proxy`](reader_news_proxy.py) – A plugin that enables proxying URLs from results through [Reader](https://github.com/Hydrophobefireman/reader), which is a [Postlight parser](https://github.com/postlight/parser) proxy for rendering readable versions of websites.
+* [`url_rewrite`](url_rewrite.py) – A plugin that enables rewriting URLs from search results based on regular expressions. Can proxy URLs through privacy-preserving services, block unwanted domains, and adjust result priorities.
 
 ## Installation
 
@@ -29,23 +29,36 @@ RUN pip3 install --break-system-packages --no-cache git+https://github.com/joest
 ```yaml
 plugins:
   - hello_world # For debug/testing only.
-  - reader_news_proxy
+  - url_rewrite
 ```
 
 ## Configuration
 
-### `reader_news_proxy`
+### `url_rewrite`
 
-* `proxy_url` – The URL to your Reader proxy.
-* `article_patterns` – Regular expressions to match URLs against; if it matches, it will be replaced with `$proxy_url?url=$original_url`.
+The URL rewrite plugin allows you to modify search result URLs using regular expressions. Each rule can:
+* Rewrite URLs to proxy them through privacy-preserving services
+* Remove results from specific domains
+* Adjust the priority of matching results
+* Optionally preserve the original parsed URL
 
 ```yaml
-reader_news_proxy:
-  proxy_url: https://your-reader-instance.example.com
-  article_patterns:
-    - '^https:\/\/(.*\.)?cnn.com\/[0-9]{4}\/\d{2}\/\d{2}\/(.*)'
-    - '^https:\/\/(.*\.)?newsweek.com/[0-9a-zA-Z\-]+$'
-    - '^https:\/\/en.wikinews.org\/wiki\/[0-9a-zA-Z_,.]+$'
-    - '^https:\/\/(.*\.)?npr.org/\d{4}\/\d{2}\/\d{2}\/(.*)'
-    - '^https:\/\/(.*\.)?yahoo.com/news/(.*)'
+url_rewrite:
+  rules:
+    - pattern: '^(?P<url>https://(.*\.)?cnn\.com/.*)$'
+      repl: 'https://reader.example.com/?url=\g<url>'
+    - pattern: '^https?://(?:www\.)?facebook\.com/.*'
+      repl: false  # Removes matching results
+    - pattern: '^(?P<url>https://news\.example\.com/.*)$'
+      repl: 'https://proxy.example.com/?url=\g<url>'
+      priority: high  # Increases result priority
+    - pattern: '^(?P<url>https://tracking\.evil\.com/.*)$'
+      repl: 'https://clean-proxy.example.com/?url=\g<url>'
+      replace_url: false  # Preserves original parsed URL
 ```
+
+Configuration options for each rule:
+* `pattern`: Regular expression pattern to match against result URLs
+* `repl`: Replacement string for matched URLs, or `false` to remove matching results
+* `priority`: Optional priority adjustment ('high' or 'low') for matching results
+* `replace_url`: Optional boolean to control whether the parsed URL is updated (defaults to true)
