@@ -4,7 +4,7 @@ from searx.plugins import logger
 
 name = "Hello World"
 description = gettext("Test plugin that prints debug log messages")
-default_on = True
+default_on = False
 preference_section = 'general'
 plugin_id = 'hello-world'
 

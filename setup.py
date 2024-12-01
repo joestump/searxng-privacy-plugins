@@ -26,12 +26,12 @@ setup(
     , zip_safe          = False
     , py_modules        = [
         'hello_world',
-        'reader_news_proxy',
+        'url_rewrite',
     ]
     , entry_points      = {
         'searxng.plugins' : [
-            'searxng-privacy.hello-world = hello_world',
-            'searxng-privacy.reader-news-proxy = reader_news_proxy',
+            'searxng-privacy.hello_world = hello_world',
+            'searxng-privacy.url_rewrite = url_rewrite',
         ]
     }
 )
