@@ -213,9 +213,7 @@ outgoing:
 #   https://docs.searxng.org/dev/plugins.html
 #
 plugins:
-  - reader_news_proxy
-#   - plugin2
-#   - ...
+  - url_rewrite
 
 # Comment or un-comment plugin to activate / deactivate by default.
 #
@@ -2490,15 +2488,21 @@ doi_resolvers:
 
 default_doi_resolver: 'oadoi.org'
 
-reader_news_proxy:
-  proxy_url: https://reader.stump.wtf
-  article_patterns:
-    - '^https:\/\/(.*\.)?cnn.com\/[0-9]{4}\/\d{2}\/\d{2}\/(.*)'
-    - '^https:\/\/(.*\.)?newsweek.com/[0-9a-zA-Z\-]+$'
-    - '^https:\/\/en.wikinews.org\/wiki\/[0-9a-zA-Z_,.]+$'
-    - '^https:\/\/(.*\.)?npr.org/\d{4}\/\d{2}\/\d{2}\/(.*)'
-    - '^https:\/\/(.*\.)?yahoo.com/news/(.*)'
-    # TODO: This is causing 500s due to timeouts
-    # - '^https:\/\/(.*\.)?washingtonpost.com\/[a-z]+\/\d{4}\/\d{2}\/\d{2}\/(.*)'
-    # TODO: This is causing 500s in Reader.
-    # - '^https:\/\/(.*\.)?reuters.com/[a-z\-]+\/[a-z\-]+'
+url_rewrite:
+  rules:
+    - pattern: ^https?://(?:www\.)?facebook\.com/.*
+      repl: false
+    - pattern: ^(?P<url>https://(.*\.)?cnn\.com/[0-9]{4}/\d{2}/\d{2}/.*)
+      repl: https://reader.stump.wtf/?url=\g<url>
+      replace_url: false
+    - pattern: ^(?P<url>https://(.*\.)?bbc\.com/news/articles/.*)
+      repl: https://reader.stump.wtf/?url=\g<url>
+      replace_url: false
+    - pattern: ^(?P<url>https://(.*\.)?newsweek\.com/[0-9a-zA-Z\-]+)$
+      repl: https://reader.stump.wtf/?url=\g<url>
+    - pattern: ^(?P<url>https://en\.wikinews\.org/wiki/[0-9a-zA-Z_,.]+)$
+      repl: https://reader.stump.wtf/?url=\g<url>
+    - pattern: ^(?P<url>https://(.*\.)?npr\.org/\d{4}/\d{2}/\d{2}/.*)
+      repl: https://reader.stump.wtf/?url=\g<url>
+    - pattern: ^(?P<url>https://(.*\.)?yahoo\.com/news/.*)
+      repl: https://reader.stump.wtf/?url=\g<url>
