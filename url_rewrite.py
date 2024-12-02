@@ -53,8 +53,8 @@ from searx import settings
 from searx.settings_loader import get_yaml_cfg
 from searx.plugins import logger
 
-# name = gettext("URL Rewrite")
-name = "URL Rewrite"
+
+name = gettext("URL Rewrite")
 description = gettext("Rewrite URLs of search results")
 default_on = True
 preference_section = 'general'
@@ -64,6 +64,7 @@ plugin_id = 'url_rewrite'
 logger = logger.getChild(plugin_id)
 config = settings.get(plugin_id, {})
 rules = config.get("rules", [])
+
 
 def on_result(request, search, result):
     if not rules:
